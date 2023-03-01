@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const uniqID = require("uniqid");
+const uniqid = require("uniqid");
 // const api = require("./routes/index.js");
 const database = require("./db/db.json");
 
@@ -31,12 +31,24 @@ app.get("/api/notes", (req, res) => {
 app.post("/api/notes", (req, res) => {
   //database is an array
   //req.body is the new note
-  database.push(req.body);
+  let note = { ...req.body };
+  note.id = uniqid();
+  database.push(note);
   fs.writeFile("./db/db.json", JSON.stringify(database), (err) =>
     console.log(err)
   );
   res.json(database);
 });
+
+// GET Route for homepage
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/index.html"))
+);
+console.log(__dirname);
+// // GET Route for feedback page
+// app.get("/feedback", (req, res) =>
+//   res.sendFile(path.join(__dirname, "/public/pages/feedback.html"))
+// );
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
