@@ -28,6 +28,16 @@ app.get("/api/notes", (req, res) => {
   res.json(database);
 });
 
+app.post("/api/notes", (req, res) => {
+  //database is an array
+  //req.body is the new note
+  database.push(req.body);
+  fs.writeFile("./db/db.json", JSON.stringify(database), (err) =>
+    console.log(err)
+  );
+  res.json(database);
+});
+
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
